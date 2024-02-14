@@ -1,0 +1,11 @@
+{
+  "_id": ObjectId("5f7880a5432bac7b32001a1"),
+  "name": "John Doe",
+  "age": 30,
+  "address": {
+    "street": "123 Main St",
+    "city": "Anytown",
+    "zipcode": "12345"
+  },
+  "hobbies": ["reading", "hiking"]
+}
