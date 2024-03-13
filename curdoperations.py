@@ -1,357 +1,75 @@
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-import datetime
-from pprint import pprint  # Added import for pprint
-
-uri = "mongodb+srv://dasaribharathkumar6:Bharath123@cluster0.bfx7sqv.mongodb.net/"
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-
-    # Get reference to 'bank' database
-    db = client.bank
-
-    # Get reference to 'accounts' collection
-    accounts_collection = db.accounts
-
-    # Inserting one account
-    new_account = {
-        "account_holder": "Linus Torvalds",
-        "account_id": "MDB829001337",
-        "account_type": "checking",
-        "balance": 50352434,
-        "last_updated": datetime.datetime.utcnow(),
-    }  # Added comment for clarity
-
-    # Write an expression that inserts the 'new_account' document into the 'accounts' collection.
-    result = accounts_collection.insert_one(new_account)
-
-    document_id = result.inserted_id
-    pprint(f"_id of inserted document: {document_id}")
-
-except Exception as e:
-    print(e)
-finally:
-    client.close()
-
-
-
-
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-import datetime
-
-uri = "mongodb+srv://dasaribharathkumar6:Bharath123@cluster0.bfx7sqv.mongodb.net/"
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-
-    # Get reference to 'social_media' database (use your preferred database name)
-    db = client.social_media
-
-    # Get reference to 'users' collection (representing Instagram-like accounts)
-    users_collection = db.users
-
-    # Inserting many Instagram-like accounts
-    new_accounts = [
-        {
-            "username": "adalovely",
-            "full_name": "Ada Lovelace",
-            "email": "ada@example.com",
-            "followers": 500,
-            "posts": [
-                {"content": "Hello World!", "timestamp": datetime.datetime.utcnow()},
-                {"content": "Coding in Python!", "timestamp": datetime.datetime.utcnow()},
-            ]
-        },
-        {
-            "username": "muhammadmath",
-            "full_name": "Muhammad al-Khwarizmi",
-            "email": "muhammad@example.com",
-            "followers": 1000,
-            "posts": [
-                {"content": "Algorithms are fascinating!", "timestamp": datetime.datetime.utcnow()},
-                {"content": "Mathematics is the key!", "timestamp": datetime.datetime.utcnow()},
-            ]
-        },
-    ]
-
-    # Write an expression that inserts the 'new_accounts' documents into the 'users' collection.
-    result = users_collection.insert_many(new_accounts)
-
-    document_ids = result.inserted_ids
-    print("# of documents inserted: " + str(len(document_ids)))
-    print(f"_ids of inserted documents: {document_ids}")
-
-except Exception as e:
-    print(e)
-finally:
-    client.close()
-
-
-
-
-
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from bson.objectid import ObjectId
-import pprint
-import datetime
-
-uri = "mongodb+srv://dasaribharathkumar6:Bharath123@cluster0.bfx7sqv.mongodb.net/"
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-
-    # Get reference to 'social_media' database (use your preferred database name)
-    db = client.social_media
-
-    # Get reference to 'users' collection (representing Instagram-like accounts)
-    users_collection = db.users
-
-    # Find users with more than 1000 followers
-    query = {"followers": {"$gt": 1000}}
-
-    # Write an expression that selects the documents matching the query constraint in the 'users' collection.
-    cursor = users_collection.find(query)
-
-    num_docs = 0
-    for document in cursor:
-        num_docs += 1
-        pprint.pprint(document)
-        print()
-    print("# of documents found: " + str(num_docs))
-
-except Exception as e:
-    print(e)
-finally:
-    client.close()
-
-
-
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from bson.objectid import ObjectId
-import pprint
-
-uri = "mongodb+srv://dasaribharathkumar6:Bharath123@cluster0.bfx7sqv.mongodb.net/"
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-
-    # Get reference to 'social_media' database (use your preferred database name)
-    db = client.social_media
-
-    # Get reference to 'users' collection (representing Instagram-like accounts)
-    users_collection = db.users
-
-    # Find an Instagram-like account by _id
-    document_to_find = {
-        "_id": ObjectId("65c2caeaae6140696995984e")
-    }
-
-    # Write an expression that finds the document in the 'users' collection.
-    result = users_collection.find_one(document_to_find)
-
-    pprint.pprint(result)
-
-except Exception as e:
-    print(e)
-finally:
-    client.close()
-
-
-
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from bson.objectid import ObjectId
-import pprint
-
-uri = "mongodb+srv://dasaribharathkumar6:Bharath123@cluster0.bfx7sqv.mongodb.net/"
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-
-    # Get reference to 'social_media' database (use your preferred database name)
-    db = client.social_media
-
-    # Get reference to 'users' collection (representing Instagram-like accounts)
-    users_collection = db.users
-
-    # Filter: Find the user you want to update
-    user_to_update = {"_id": ObjectId("65c2cb3a004800a420ffc3dd")}
-
-    # Update: Increment the followers count by 100
-    update_followers = {"$inc": {"followers": 100}}
-
-    # Print original user document
-    pprint.pprint(users_collection.find_one(user_to_update))
-
-    # Write an expression that updates the target user's followers count by the specified amount.
-    result = users_collection.update_one(user_to_update, update_followers)
-    print("Documents updated: " + str(result.modified_count))
-
-    # Print updated user document
-    pprint.pprint(users_collection.find_one(user_to_update))
-
-except Exception as e:
-    print(e)
-finally:
-    client.close()
-
-
-
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from bson.objectid import ObjectId
-import pprint
-
-uri = "mongodb+srv://dasaribharathkumar6:Bharath123@cluster0.bfx7sqv.mongodb.net/"
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-
-    # Get reference to 'social_media' database (use your preferred database name)
-    db = client.social_media
-
-    # Get reference to 'users' collection (representing Instagram-like accounts)
-    users_collection = db.users
-
-    # Filter: Find users with a follower count above a certain threshold
-    filter_condition = {"followers": {"$gt": 1000}}
-
-    # Print original user documents
-    pprint.pprint(list(users_collection.find(filter_condition)))
-
-    # Update: Set the account type to "premium" for selected users
-    update_account_type = {"$set": {"account_type": "premium"}}
-
-    # Write an expression that updates the account type for users based on the filter condition.
-    result = users_collection.update_many(filter_condition, update_account_type)
-    print("Documents matched: " + str(result.matched_count))
-    print("Documents updated: " + str(result.modified_count))
-
-    # Print updated user documents
-    pprint.pprint(list(users_collection.find(filter_condition)))
-
-except Exception as e:
-    print(e)
-finally:
-    client.close()     
-
-
-
-
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from bson.objectid import ObjectId
-import pprint
-
-uri = "mongodb+srv://dasaribharathkumar6:Bharath123@cluster0.bfx7sqv.mongodb.net/"
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-
-    # Get reference to 'social_media' database (use your preferred database name)
-    db = client.social_media
-
-    # Get reference to 'users' collection (representing Instagram-like accounts)
-    users_collection = db.users
-
-    # Filter: Find the user to delete by username
-    filter_condition = {"username": "target_user"}
-
-    # Search for the user document before delete
-    print("Searching for target user before delete: ")
-    pprint.pprint(users_collection.find_one(filter_condition))
-
-    # Write an expression that deletes the target user.
-    result = users_collection.delete_one(filter_condition)
-
-    # Search for the user document after delete
-    print("Searching for target user after delete: ")
-    pprint.pprint(users_collection.find_one(filter_condition))
-
-    print("Documents deleted: " + str(result.deleted_count))
-
-except Exception as e:
-    print(e)
-finally:
-    client.close()  
-
-
-
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from bson.objectid import ObjectId
-import pprint
-
-uri = "mongodb+srv://dasaribharathkumar6:Bharath123@cluster0.bfx7sqv.mongodb.net/"
-
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
-try:
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-
-    # Get reference to 'social_media' database (use your preferred database name)
-    db = client.social_media
-
-    # Get reference to 'users' collection (representing Instagram-like accounts)
-    users_collection = db.users
-
-    # Filter: Find users with fewer than 100 followers
-    filter_condition = {"followers": {"$lt": 100}}
-
-    # Search for sample user documents before delete
-    print("Searching for sample target users before delete: ")
-    pprint.pprint(list(users_collection.find(filter_condition)))
-
-    # Write an expression that deletes the target users.
-    result = users_collection.delete_many(filter_condition)
-
-    # Search for sample user documents after delete
-    print("Searching for sample target users after delete: ")
-    pprint.pprint(list(users_collection.find(filter_condition)))
-
-    print("Documents deleted: " + str(result.deleted_count))
-
-except Exception as e:
-    print(e)
-finally:
-    client.close()
-
-
-
-
-
-
+/* global use, db */
+// https://www.mongodb.com/docs/mongodb-vscode/playgrounds/
+
+// Select the database to use.
+use('mongodbVSCodePlaygroundDB');
+
+// Insert a few documents into the sales collection.
+db.anime.insertOne(
+  { 'anime': 'Naruto', 'rating': 9.0, 'votes': 10000 }
+);
+
+// Insert hypothetical popularity data for some anime into the 'anime' collection.
+db.anime.insertMany([
+  { 'anime': 'Naruto', 'rating': 9.0, 'votes': 10000 },
+  { 'anime': 'One Piece', 'rating': 9.5, 'votes': 15000 },
+  { 'anime': 'Dragon Ball Z', 'rating': 8.5, 'votes': 8000 },
+  { 'anime': 'Attack on Titan', 'rating': 9.2, 'votes': 12000 },
+  { 'anime': 'Death Note', 'rating': 9.3, 'votes': 11000 },
+  { 'anime': 'My Hero Academia', 'rating': 9.1, 'votes': 13000 },
+  { 'anime': 'Fullmetal Alchemist: Brotherhood', 'rating': 9.7, 'votes': 18000 }
+]);
+
+// Specify the title of the anime you want to find.
+const animeTitle = 'Naruto';
+
+// Use findOne to find the anime by its title.
+const anime = db.anime.findOne({ 'anime': animeTitle });
+
+// Check if the anime exists.
+if (anime) {
+    // Print the details of the anime.
+    printjson(anime);
+} else {
+    print(`Anime with title "${animeTitle}" not found.`);
+}
+
+const allAnime = db.anime.find();
+
+// Iterate over the cursor to access each document.
+allAnime.forEach(anime => {
+    printjson(anime);
+});
+
+// Define the filter to identify the documents you want to update.
+const filter = { 'rating': { $lt: 9.0 } };
+
+// Define the update operation to apply to the matching documents.
+// For example, let's increase the rating of all anime with a rating less than 9.0 by 0.5.
+const update = {
+  $inc: { 'rating': 0.5 }
+};
+
+// Use updateMany to apply the update operation to all documents that match the filter.
+const result = db.anime.updateMany(filter, update);
+
+// Check if the update was successful.
+if (result.modifiedCount > 0) {
+  print(`Successfully updated the ratings of ${result.modifiedCount} anime.`);
+} else {
+  print(`No document matched the filter criteria.`);
+}
+
+
+// Define an empty filter to match all documents in the collection.
+const filter = {};
+
+// Use deleteMany to remove all documents from the collection.
+const result = db.anime.deleteMany(filter);
+
+// Check if the deletion was successful.
+if (result.deletedCount > 0) {
+  print(`Successfully deleted ${result.deletedCount} documents from the 'anime' collection.`);
+} else {
+  print(`No documents matched the filter criteria.`);
+}
